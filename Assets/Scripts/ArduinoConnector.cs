@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using System.IO.Ports; // this enables the IO port namespace
+using System.IO.Ports; // this enables the IO port namespace
 
 // ************* This script manages the Arduino Communication ******************* //
 // arduino script at the bottom //
@@ -19,16 +19,16 @@ public class ArduinoConnector : MonoBehaviour
     public float angleConversionFactor;
     public float WheelRaduis;
 
-    /*
+    
     [HideInInspector]
 	public SerialPort sp;
-    */
+    
     private string recievedValue;
 
     private bool hasPassed;
     private float timeBtwPassings;
 
-    /*
+    
     // Start is called before the first frame update
     void Start()
     {
@@ -63,7 +63,7 @@ public class ArduinoConnector : MonoBehaviour
         sp.ReadTimeout = 35;
     }
 
-    */
+    
     void SetDirection(string message)
     {
         // InputStringFormat:  "potentiometerValue between 0 & 1023,magnet passed 1 (no) 0 (yes)"
@@ -113,43 +113,25 @@ public class ArduinoConnector : MonoBehaviour
 
 /* Put this code on your arduino 
 
-    // MPU-6050 Gyroscope & accelerometer read-out to Unity
-    // By Arduino User JohnChi // modified by Jelle Vermandere
-    // March 21, 2020
-    // Public Domain
-    #include<Wire.h>
-    const int MPU=0x68; 
-    int16_t AcX,AcY,AcZ,Tmp,GyX,GyY,GyZ;
+    int const potPin = A0;
+int potVal;
+const int spd = 7;
 
-    void setup(){
-      Wire.begin();
-      Wire.beginTransmission(MPU);
-      Wire.write(0x6B); 
-      Wire.write(0);    
-      Wire.endTransmission(true);
-      Serial.begin(9600);
-    }
-    void loop(){
-      Wire.beginTransmission(MPU);
-      Wire.write(0x3B);  
-      Wire.endTransmission(false);
-      Wire.requestFrom(MPU,12,true);  
-      AcX=Wire.read()<<8|Wire.read();    
-      AcY=Wire.read()<<8|Wire.read();  
-      AcZ=Wire.read()<<8|Wire.read();  
-      GyX=Wire.read()<<8|Wire.read();  
-      GyY=Wire.read()<<8|Wire.read();  
-      GyZ=Wire.read()<<8|Wire.read();  
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  pinMode(spd, INPUT);
+  digitalWrite(spd, HIGH);
+}
+
+void loop() {
+  // put your main code here, to run repeatedly:
+  potVal = analogRead(potPin);
+  Serial.print(potVal);
+  Serial.print(",");
+  Serial.println(digitalRead(spd));
+  delay(25);
+  //Serial.flush();
   
-      Serial.print(AcX); Serial.print(",");
-      Serial.print(AcY); Serial.print(",");
-      Serial.print(AcZ); Serial.print(",");
-
-      Serial.print(GyX); Serial.print(",");
-      Serial.print(GyY); Serial.print(",");
-      Serial.print(GyZ); 
-      Serial.println("");
-      Serial.flush();
-      delay(25);
-    }
+}
 */
